@@ -30,5 +30,27 @@
 
 
 
+![](E:\auto\Distribute\large_scale_distributed_system_principles_and_architectures\SMP-system-structure.png)
 
+​	图中的SMP系统由两个CPU构成，每个cpu有两个核心core，cpu与内存之间通过总线通信。每个核心有各自的L1d Cache——L1数据缓存，以及L1i Cache——L1指令缓存，同一个CPU的多个核心共享L2以及L3缓存，另外，某些CPU还可以通过**超线程技术Hyper-Threading Teachnology**使得 一个核心具有同时执行两个线程的能力。
+
+​	SMP**架构的主要特征是共享**，系统中所有资源——CPU,内存,I/O等，都是共享的，由于多CPU**对前端总线的竞争**，SMP的拓展能力非常有限。为了提高拓展性，现在的主流服务器架构一般为NUMA架构——Non-Uniform Memory Access，非一致存储访问架构。它具有多个NUMA节点，每个NUMA节点是一个SMP结构，一般由多个CPU（如4个）组成，并且具有独立的本地内存、I/O槽口等。
+
+​	NUMA节点可以直接快速访问本地内存，也可以通过NUMA**互联互通模块**访问其他NUMA节点的内存，**访问本地内存的速度远远高于远程访问的速度**。因此为了更好的发挥系统的性能，开发应用程序时**需要尽量减少不同NUMA节点之间的信息交互**
+
+##### I/O总线
+
+​	**存储系统的性能瓶颈一般在于IO**，因此有必要对IO子系统的架构有一个大致的了解！
+
+如图：它是典型的南北桥架构。北桥芯片通过前端总线FSB与 CPU相连，内存模块以及PCI-E设备——如高端的SSD设备Fusion-IO，挂接在北桥上。北桥与南桥之间通过DMI连接，DMI的带宽为1GB/s，网卡——包括千兆以及万兆网卡，硬盘以及中低端固态硬盘——inter 320系列SSD，挂接在南桥上。如果采用SATA2接口，那么最大带宽为300MB/s
+
+![](E:\auto\Distribute\large_scale_distributed_system_principles_and_architectures\Inter X48主板南北桥架构.jpg)
+
+
+
+
+
+
+
+##### 网路拓扑
 
